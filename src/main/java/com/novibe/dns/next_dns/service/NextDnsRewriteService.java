@@ -1,7 +1,7 @@
 package com.novibe.dns.next_dns.service;
 
 import com.novibe.common.data_sources.HostsOverrideListsLoader;
-import com.novibe.common.service.IgnoreRedirectCheckService;
+import com.novibe.common.service.ExcludeRedirectCheckService;
 import com.novibe.common.util.Log;
 import com.novibe.dns.next_dns.http.NextDnsRateLimitedApiProcessor;
 import com.novibe.dns.next_dns.http.NextDnsRewriteClient;
@@ -22,7 +22,7 @@ import static java.util.Objects.nonNull;
 public class NextDnsRewriteService {
 
     private final NextDnsRewriteClient nextDnsRewriteClient;
-    private final IgnoreRedirectCheckService ignoreRedirectCheckService;
+    private final ExcludeRedirectCheckService excludeRedirectCheckService;
 
     public Map<String, CreateRewriteDto> buildNewRewrites(List<HostsOverrideListsLoader.BypassRoute> overrides) {
         Map<String, CreateRewriteDto> rewriteDtos = new HashMap<>();
@@ -30,7 +30,7 @@ public class NextDnsRewriteService {
         return rewriteDtos;
     }
 
-    public List<CreateRewriteDto> cleanupOutdatedAndIgnored(Map<String, CreateRewriteDto> newRewriteRequests) {
+    public List<CreateRewriteDto> cleanupOutdatedAndExcluded(Map<String, CreateRewriteDto> newRewriteRequests) {
         List<RewriteDto> existingRewrites = getExistingRewrites();
 
         List<String> outdatedIds = new ArrayList<>();
@@ -39,7 +39,7 @@ public class NextDnsRewriteService {
         for (RewriteDto existingRewrite : existingRewrites) {
             String domain = existingRewrite.name();
             String oldIp = existingRewrite.content();
-            if (ignoreRedirectCheckService.shouldIgnore(domain)) {
+            if (excludeRedirectCheckService.shouldExclude(domain)) {
                 ignoredIds.add(existingRewrite.id());
                 newRewriteRequests.remove(domain);
                 continue;
@@ -56,7 +56,7 @@ public class NextDnsRewriteService {
             NextDnsRateLimitedApiProcessor.callApi(outdatedIds, nextDnsRewriteClient::deleteRewriteById);
         }
         if (!ignoredIds.isEmpty()) {
-            Log.io("Removing %s ignored rewrites from NextDNS".formatted(ignoredIds.size()));
+            Log.io("Removing %s excluded rewrites from NextDNS".formatted(ignoredIds.size()));
             NextDnsRateLimitedApiProcessor.callApi(ignoredIds, nextDnsRewriteClient::deleteRewriteById);
         }
         return List.copyOf(newRewriteRequests.values());

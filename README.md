@@ -15,7 +15,7 @@
 
 [Setup data sources](#setup-data-sources)
 
-[Ignore redirect (optional)](#ignore-redirect-optional)
+[Setup exclude redirects (optional)](#setup-exclude-redirects-optional)
 
 [GitHub Actions](#github-actions-setup)
 
@@ -106,9 +106,9 @@ will keep only `domain.to.block` and `another.to.block` for the further block pr
 
 ---
 
-## Ignore redirect (optional)
+## Setup exclude redirects (optional)
 
-Put domains to **environment variable** `IGNORE_REDIRECT` separated by coma, e.g. `instagram.com,twitch.com`
+Put domains to **environment variable** `EXCLUDE_REDIRECT` separated by coma, e.g. `instagram.com,twitch.com`
 
 These domains and their subdomains:
 - will be removed from existing redirect rules;

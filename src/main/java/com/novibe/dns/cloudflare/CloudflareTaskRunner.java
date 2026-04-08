@@ -61,7 +61,7 @@ public class CloudflareTaskRunner implements DnsTaskRunner {
 
         Log.step("Creating new override lists");
         if (!overrides.isEmpty()) {
-            listService.omitIgnoredOverrides(overrides);
+            listService.omitExcludedOverrides(overrides);
             Map<String, List<GatewayListDto>> newOverrideLists = listService.createNewOverrideLists(overrides);
 
             Log.step("Creating new override rules");

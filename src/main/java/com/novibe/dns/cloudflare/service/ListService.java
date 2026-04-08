@@ -1,7 +1,7 @@
 package com.novibe.dns.cloudflare.service;
 
 import com.novibe.common.data_sources.HostsOverrideListsLoader;
-import com.novibe.common.service.IgnoreRedirectCheckService;
+import com.novibe.common.service.ExcludeRedirectCheckService;
 import com.novibe.common.util.FunctionWrapper;
 import com.novibe.common.util.Log;
 import com.novibe.dns.cloudflare.http.CloudflareListClient;
@@ -30,7 +30,7 @@ public class ListService {
     private static final String OVERRIDE_LIST_NAME_PREFIX = "Override websites by script";
 
     private final CloudflareListClient cloudflareListClient;
-    private final IgnoreRedirectCheckService ignoreRedirectCheckService;
+    private final ExcludeRedirectCheckService excludeRedirectCheckService;
     private final String sessionId;
 
 
@@ -46,8 +46,8 @@ public class ListService {
         return saveNewLists(createListRequests);
     }
 
-    public void omitIgnoredOverrides(List<HostsOverrideListsLoader.BypassRoute> routes) {
-        routes.removeIf(route -> ignoreRedirectCheckService.shouldIgnore(route.website()));
+    public void omitExcludedOverrides(List<HostsOverrideListsLoader.BypassRoute> routes) {
+        routes.removeIf(route -> excludeRedirectCheckService.shouldExclude(route.website()));
     }
 
 

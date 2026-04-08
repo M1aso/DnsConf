@@ -34,7 +34,7 @@ public class NextDnsTaskRunner implements DnsTaskRunner {
                 Script behaviour: old BLOCK/REDIRECT settings are about to be updated via provided BLOCK/REDIRECT sources.
                 - if no sources provided, then all NextDNS settings will be removed.
                 - if provided only one type of sources, related settings will be updated; another type remain untouched.
-                - if IGNORE_REDIRECT domains provided, they will affect both existing and new redirect rules.
+                - if EXCLUDE_REDIRECT domains provided, they will affect both existing and new redirect rules.
                 NextDNS api rate limiter reset config: 60 seconds after the last request""");
 
         List<String> blockSources = EnvParser.parse(BLOCK);
@@ -58,7 +58,7 @@ public class NextDnsTaskRunner implements DnsTaskRunner {
 
             Log.step("Prepare rewrites");
             Map<String, CreateRewriteDto> requests = nextDnsRewriteService.buildNewRewrites(overrides);
-            List<CreateRewriteDto> createRewriteDtos = nextDnsRewriteService.cleanupOutdatedAndIgnored(requests);
+            List<CreateRewriteDto> createRewriteDtos = nextDnsRewriteService.cleanupOutdatedAndExcluded(requests);
 
             Log.step("Save rewrites");
             nextDnsRewriteService.saveRewrites(createRewriteDtos);

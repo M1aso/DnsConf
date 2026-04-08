@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IgnoreRedirectSettingsLoader {
+public class ExcludeRedirectSettingsLoader {
 
     public List<String> loadIgnoredDomains() {
-        return Optional.ofNullable(EnvParser.parse(EnvironmentVariables.IGNORE_REDIRECT))
+        return Optional.ofNullable(EnvParser.parse(EnvironmentVariables.EXCLUDE_REDIRECT))
                 .stream()
                 .flatMap(List::stream)
                 .map(String::trim)

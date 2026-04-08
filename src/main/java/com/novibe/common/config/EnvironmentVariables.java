@@ -16,7 +16,7 @@ public class EnvironmentVariables {
 
     public static final String REDIRECT = System.getenv("REDIRECT");
 
-    public static final String IGNORE_REDIRECT = System.getenv("IGNORE_REDIRECT");
+    public static final String EXCLUDE_REDIRECT = System.getenv("EXCLUDE_REDIRECT");
 
     private static String extractMandatoryVariable(String key) {
         String env = System.getenv(key);

@@ -1,20 +1,20 @@
 package com.novibe.common.service;
 
-import com.novibe.common.data_sources.IgnoreRedirectSettingsLoader;
+import com.novibe.common.data_sources.ExcludeRedirectSettingsLoader;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class IgnoreRedirectCheckService {
+public class ExcludeRedirectCheckService {
 
     private final List<String> ignoringList;
 
-    public IgnoreRedirectCheckService(IgnoreRedirectSettingsLoader ignoreRedirectSettingsLoader) {
-        ignoringList = ignoreRedirectSettingsLoader.loadIgnoredDomains();
+    public ExcludeRedirectCheckService(ExcludeRedirectSettingsLoader excludeRedirectSettingsLoader) {
+        ignoringList = excludeRedirectSettingsLoader.loadIgnoredDomains();
     }
 
-    public boolean shouldIgnore(String domain) {
+    public boolean shouldExclude(String domain) {
         for (String ignored : ignoringList) {
             if (domain.endsWith(ignored)) {
                 return true;
